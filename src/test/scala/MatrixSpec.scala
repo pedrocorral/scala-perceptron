@@ -57,5 +57,24 @@ class MatrixSpec extends FlatSpec {
     assert( Matrix( 1, 2, 4, 8 ) == Matrix( 1, 2, 4, 8 ) )
   }
 
+  "A matrix" should "have some minors" in {
+    val M = Matrix(
+      -2, 2,-3,
+      -1, 1, 3,
+       2, 0,-1
+    )
+    assert( M.minor(1,1) == Matrix( 1,3,0,-1 ) )
+    assert( M.minor(2,2) == Matrix( -2,-3,2,-1 ) )
+    assert( M.minor(1,3) == Matrix( -1,1,2,0 ) )
+  }
+
+  "A matrix" should "calculate its determinant" in {
+    Matrix(
+      -2, 2,-3,
+      -1, 1, 3,
+       2, 0,-1
+    ).determinant shouldBe 18
+  }
+
 }
 

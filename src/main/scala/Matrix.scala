@@ -42,9 +42,14 @@ package pedrocorral {
       case n => (n,ij.head.length)
     }
 
-    def determinant = sizes match {
+    def determinant: Double = sizes match {
       case (2,2) => ij(0)(0)*ij(1)(1) - ij(0)(1)*ij(1)(0)
-      case (n,m) if ( n == m ) => throw new Error( "...." )
+      case (n,m) if ( n == m ) => ij.head.zipWithIndex.map {
+        case (e,x) => if ( x%2 == 0 )
+          e * minor(1,x+1).determinant
+        else
+          -e * minor(1,x+1).determinant
+      }.sum
       case _ => throw new Error( "Matrix::determinant::ERRoR::Not a squared matrix :S" )
     }
 
@@ -52,9 +57,9 @@ package pedrocorral {
       sizes match {
         case (n,m) if ( i <= n && j <= m ) => Matrix(
           ij.zipWithIndex.collect {
-            case (v,y) if ( y != i ) => v.zipWithIndex.filter {
-              case (_,x) => x != j
-            }
+            case (v,y) if ( y+1 != i ) => v.zipWithIndex.filter {
+              case (_,x) => x+1 != j
+            }.map( _._1 )
           }
         )
         case (n,m) => throw new IndexOutOfBoundsException( s"Matrix::minor::ERRoR::($i,$j) are out of ($n,$m)" )
