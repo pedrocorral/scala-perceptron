@@ -37,18 +37,18 @@ package pedrocorral {
           ( error( y_xs, b_ws ), b :: ws )
         }
 
-        def improve( depth: Int, e0: Double, e: Double, rest: List[Y_XS], b_ws: B_WS ): Option[Perceptron] = {
+        def improve( depth: Int, e: Double, rest: List[Y_XS], b_ws: B_WS ): Option[Perceptron] = {
           rest match {
             case Nil if ( e < ε ) => Some( Perceptron( b_ws.tail, b_ws.head ) )
             case Nil if ( depth >= 100000 ) => None
-            case Nil => improve( depth+1, e, 0.0, ys_xss, b_ws )
+            case Nil => improve( depth+1, 0.0, ys_xss, b_ws )
             case y_xs::ys_xss => improveFromSample( y_xs, b_ws ) match {
-              case (e_y, b_ws: B_WS) => improve( depth, e0, e+e_y, ys_xss, b_ws )
+              case (e_y, b_ws: B_WS) => improve( depth, e+e_y, ys_xss, b_ws )
             }
           }
         }
 
-        improve( 0, e0, 0.0, ys_xss, b_ws )
+        improve( 0, 0.0, ys_xss, b_ws )
       }
 
       training( injectedTraining, ys_xss.toList )
